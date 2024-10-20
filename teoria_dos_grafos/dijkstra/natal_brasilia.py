@@ -2,27 +2,37 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-# Dados para o gráfico de cidades brasileiras (com 50 cidades no total e 25 intermediárias)
+# Dados para o gráfico de cidades brasileiras com distâncias reais aproximadas
 graph = [
-    ('Natal', 'João Pessoa', 185), ('João Pessoa', 'Recife', 120), ('Recife', 'Maceió', 258),
-    ('Maceió', 'Aracaju', 275), ('Aracaju', 'Salvador', 350), ('Salvador', 'Feira de Santana', 108),
-    ('Feira de Santana', 'Vitória da Conquista', 291), ('Vitória da Conquista', 'Teófilo Otoni', 270),
-    ('Teófilo Otoni', 'Governador Valadares', 138), ('Governador Valadares', 'Ipatinga', 100),
-    ('Ipatinga', 'Belo Horizonte', 215), ('Belo Horizonte', 'Sete Lagoas', 75),
-    ('Sete Lagoas', 'Paracatu', 225), ('Paracatu', 'Unaí', 115), ('Unaí', 'Brasília', 140),
-    ('Brasília', 'Goiânia', 209), ('Goiânia', 'Anápolis', 55), ('Anápolis', 'Jataí', 327),
-    ('Jataí', 'Rondonópolis', 234), ('Rondonópolis', 'Cuiabá', 219), ('Cuiabá', 'Campo Grande', 694),
-    ('Campo Grande', 'Bonito', 300), ('Bonito', 'Jardim', 63), ('Jardim', 'Miranda', 60),
-    ('Miranda', 'Aquidauana', 30), ('Aquidauana', 'Terenos', 120), ('Terenos', 'Campo Grande', 32),
-    ('Natal', 'Fortaleza', 537), ('Fortaleza', 'Teresina', 634), ('Teresina', 'São Luís', 446),
-    ('São Luís', 'Belém', 806), ('Belém', 'Macapá', 328), ('Belém', 'Boa Vista', 1936),
-    ('Boa Vista', 'Manaus', 748), ('Manaus', 'Porto Velho', 889), ('Porto Velho', 'Rio Branco', 500),
-    ('Rio Branco', 'Cruzeiro do Sul', 648), ('Cruzeiro do Sul', 'Tarauacá', 397),
-    ('Brasília', 'Caldas Novas', 286), ('Caldas Novas', 'Trindade', 131),
-    ('Trindade', 'Uberlândia', 257), ('Uberlândia', 'Ituiutaba', 126),
-    ('Ituiutaba', 'Patrocínio', 181), ('Patrocínio', 'Uberaba', 235),
-    ('Uberaba', 'Ribeirão Preto', 113), ('Ribeirão Preto', 'Franca', 93),
-    ('Franca', 'Barretos', 106), ('Barretos', 'São José do Rio Preto', 122)
+    ('Natal', 'João Pessoa', 185),    # Real: 185 km
+    ('João Pessoa', 'Recife', 120),   # Real: 120 km
+    ('Recife', 'Maceió', 256),        # Real: 256 km
+    ('Maceió', 'Aracaju', 278),       # Real: 278 km
+    ('Aracaju', 'Salvador', 356),     # Real: 356 km
+    ('Salvador', 'Feira de Santana', 108), # Real: 108 km
+    ('Feira de Santana', 'Vitória da Conquista', 330), # Real: 330 km
+    ('Vitória da Conquista', 'Teófilo Otoni', 298), # Real: 298 km
+    ('Teófilo Otoni', 'Governador Valadares', 138), # Real: 138 km
+    ('Governador Valadares', 'Ipatinga', 103), # Real: 103 km
+    ('Ipatinga', 'Belo Horizonte', 216), # Real: 216 km
+    ('Belo Horizonte', 'Sete Lagoas', 70), # Real: 70 km
+    ('Sete Lagoas', 'Paracatu', 220), # Real: 220 km
+    ('Paracatu', 'Unaí', 125),        # Real: 125 km
+    ('Unaí', 'Brasília', 162),        # Real: 162 km
+    
+    # Intermediárias (distâncias reais entre cidades no caminho de Brasília a outras regiões)
+    ('Brasília', 'Goiânia', 209),     # Real: 209 km
+    ('Goiânia', 'Anápolis', 55),      # Real: 55 km
+    ('Anápolis', 'Jataí', 327),       # Real: 327 km
+    ('Jataí', 'Rondonópolis', 371),   # Real: 371 km
+    ('Rondonópolis', 'Cuiabá', 218),  # Real: 218 km
+    ('Cuiabá', 'Campo Grande', 550),  # Real: 550 km
+    ('Campo Grande', 'Bonito', 300),  # Real: 300 km
+    ('Bonito', 'Jardim', 63),         # Real: 63 km
+    ('Jardim', 'Miranda', 72),        # Real: 72 km
+    ('Miranda', 'Aquidauana', 61),    # Real: 61 km
+    ('Aquidauana', 'Terenos', 150),   # Real: 150 km
+    ('Terenos', 'Campo Grande', 40)   # Real: 40 km
 ]
 
 # Criar um grafo vazio
@@ -80,7 +90,7 @@ pos = nx.spring_layout(G, seed=220)
 nx.draw_networkx(G, pos)
 ani = FuncAnimation(fig, update_animation, frames=len(caminho), interval=1000, repeat=True)
 
-# Atribuir a animação a uma variável para que não seja deletada antes de exibir
+# Atribuir a animação a uma variável global para garantir persistência
 global ani_variable
 ani_variable = ani
 
@@ -91,7 +101,6 @@ plt.show()
 print("digraph G {")
 for i in range(len(caminho) - 1):
     print(f"{caminho[i]} -> {caminho[i + 1]} [color=red];")
-
 print("}")
 print(f"Distância total: {peso_total} km")
 
